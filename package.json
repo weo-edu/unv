@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@f/pending-value": "^1.0.0",
+    "babel-preset-es2015-without-regenerator": "^1.0.1",
     "babel-register": "^6.4.3",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
@@ -25,6 +26,7 @@
     "koa-route": "^2.4.2",
     "koa-send": "^3.1.0",
     "minimist": "^1.2.0",
+    "sha1": "^1.1.1",
     "watchify": "^3.7.0"
   },
   "devDependencies": {

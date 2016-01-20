@@ -2,9 +2,8 @@
  * Imports
  */
 
-import pendingValue from '@f/pending-value'
-import browserify from 'browserify'
-import concat from 'concat-stream'
+import Assetify from './assetify'
+import bundle from './bundle'
 import route from 'koa-route'
 import send from 'koa-send'
 import path from 'path'
@@ -33,7 +32,7 @@ function serve ({exts = defaultExts, client, server}) {
     assets: {}
   }
   const assetify = Assetify({exts, assets: urls.assets})
-  const {js} = bundle({client, assetify})
+  const {js} = bundle({client, assetify, update: () => require(server).replace && require(server).replace()})
   assetify.node()
 
   /**
@@ -51,8 +50,8 @@ function serve ({exts = defaultExts, client, server}) {
 
   app.use(function *(next) {
     if (this.url.startsWith('/assets/')) {
-      if (assets[this.url] || this.url) {
-        const file = path.relative(process.cwd(), assets[this.url])
+      if (urls.assets[this.url] || this.url) {
+        const file = path.relative(process.cwd(), urls.assets[this.url])
         yield send(this, file, {root: process.cwd()})
       } else {
         this.status = 404
@@ -65,7 +64,7 @@ function serve ({exts = defaultExts, client, server}) {
   app.use(function *() {
     let render = require(server)
     render = 'function' === typeof render.default ? render.default : render
-    this.body = yield Promise.resolve(render(this.req, assets))
+    this.body = yield Promise.resolve(render(this.req, urls))
   })
 
   /**
@@ -76,3 +75,9 @@ function serve ({exts = defaultExts, client, server}) {
     console.log('Listening on port', 3000)
   })
 }
+
+/**
+ * Exports
+ */
+
+export default serve

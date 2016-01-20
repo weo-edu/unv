@@ -9,13 +9,12 @@ import hmr from 'browserify-hmr'
 import babelify from 'babelify'
 import watchify from 'watchify'
 import errorify from 'errorify'
-import assetify from 'assetify'
 
 /**
  * Bundler
  */
 
-function bundle ({client, assetify}) {
+function bundle ({client, assetify, update}) {
   const js = pendingValue()
   const b = browserify({
     entries: client,
@@ -31,7 +30,7 @@ function bundle ({client, assetify}) {
   js.pending()
 
   function bundle () {
-    require(server).replace && require(server).replace()
+    update()
     js.pending()
     b.bundle()
       .pipe(concat(function (str) { js.ready(str) }))
