@@ -79,6 +79,10 @@ There is currently not a particular solution for css. Which means you're mostly 
 
 unv will also support building all of your assets and an asset map (similar to webpack's) for production, but that is still TBD.
 
+## ES6
+
+All of your code (server and client) will be babel'd from the start. So no need for any `server.babel.js` or anything like that.
+
 ## License
 
 MIT

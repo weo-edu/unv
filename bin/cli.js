@@ -9,6 +9,9 @@ var path = require('path')
 var unv = require('..')
 var fs = require('fs')
 
+// Enable babel by default when used from the command line
+require('babel-register')
+
 /**
  * CLI
  */
