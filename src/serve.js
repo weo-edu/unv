@@ -64,7 +64,7 @@ function serve ({exts = defaultExts, client, server}) {
   app.use(function *() {
     let render = require(server)
     render = 'function' === typeof render.default ? render.default : render
-    this.body = yield Promise.resolve(render(this.req, urls))
+    this.body = yield render(this.req, urls)
   })
 
   /**
