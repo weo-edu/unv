@@ -31,6 +31,28 @@ Just your standard clientside entry-point. Nothing special here.
 
 Your server.js file should export a single function of the form `render(request, urls)`. `urls.js` is the path to your javascript bundle, and `request` is a node request object. Your render function may return any yieldable value (e.g. promise, string, thunk, generator, etc.) that resolves to the HTML of the page you want to render.
 
+Example:
+
+```javascript
+export default function *(req, urls) {
+  const {state, html} = yield main(req)
+  
+  return `
+    <html>
+      <head>
+        <script type='text/javascript'>
+          window.__initialState__ = ${JSON.stringify(state)}
+        </script>
+        <script type='text/javascript' src='${urls.js}'></script>
+      </head>
+      <body>
+        ${html}
+      </body>
+     </html>
+     `
+}
+```
+
 ## Hot reloading
 
 Hot reloading is turned on by default in the dev server, and since everything is javascript, it's the only type of reloading you'll need (i.e. no livereload). To support server-side hot reloading, your `server.js` may export a `replace` method.
