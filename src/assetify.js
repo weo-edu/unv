@@ -12,7 +12,7 @@ import fs from 'fs'
  */
 
 function assetify ({assets, exts, base = '/assets/'}) {
-  const extRe = new RegExp('\.' + exts.join('|') + '$')
+  const extRe = new RegExp('\\.(?:' + exts.join('|') + ')$')
 
   return {
     browser () {
