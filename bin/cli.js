@@ -29,7 +29,9 @@ if (cmd === 'dev') {
   var port = args.port || 3000
 
   if (!client) client = tryDefaults('client.js')
+  if (!client) client = tryDefaults('client/')
   if (!server) server = tryDefaults('server.js')
+  if (!server) server = tryDefaults('server/')
 
   unv.serve({
     client,

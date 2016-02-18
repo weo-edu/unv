@@ -3,12 +3,10 @@
  */
 
 import pendingValue from '@f/pending-value'
-import concat from 'concat-stream'
 import browserify from 'browserify'
 import hmr from 'browserify-hmr'
 import babelify from 'babelify'
 import watchify from 'watchify'
-import errorify from 'errorify'
 
 /**
  * Bundler
@@ -22,7 +20,7 @@ function bundle ({client, assetify, update}) {
     cache: {},
     debug: true,
     transform: [babelify, assetify.browser()],
-    plugin: [[watchify, {delay: 0}], hmr, errorify]
+    plugin: [[watchify, {delay: 0}], hmr]
   })
 
   b.on('update', bundle)
@@ -32,8 +30,7 @@ function bundle ({client, assetify, update}) {
   function bundle () {
     update()
     js.pending()
-    b.bundle()
-      .pipe(concat(function (str) { js.ready(str) }))
+    b.bundle((err, str) => err ? console.log('browserify error:', err) : js.ready(str))
   }
 
   return {
