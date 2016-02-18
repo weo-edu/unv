@@ -19,7 +19,7 @@ const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg']
  * Serve
  */
 
-function serve ({exts = defaultExts, client, server}) {
+function serve ({exts = defaultExts, client, server, port = 3000}) {
   server = server ? path.resolve(process.cwd(), server) : './defaultIndex'
 
   /**
@@ -71,8 +71,8 @@ function serve ({exts = defaultExts, client, server}) {
    * Listen
    */
 
-  app.listen(3000, function () {
-    console.log('Listening on port', 3000)
+  app.listen(port, function () {
+    console.log('Listening on port', port)
   })
 }
 

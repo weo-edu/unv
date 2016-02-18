@@ -26,13 +26,15 @@ require('babel-register')
 if (cmd === 'dev') {
   var client = args.client
   var server = args.server
+  var port = args.port || 3000
 
   if (!client) client = tryDefaults('client.js')
   if (!server) server = tryDefaults('server.js')
 
   unv.serve({
     client,
-    server
+    server,
+    port
   })
 } else {
   console.log('Unrecognized command')

@@ -23,6 +23,7 @@ In your project's root. If you want more options, then...
 
 ### Options
 
+  * `--port <port>`   - Port to listen on. Defaults to `3000`.
   * `--server <file>` - Server entrypoint
   * `--client <file>` - Client entrypoint
   * `--modules <dir>` - Root module folder. E.g. `src/`. This folder will be added to the module resolution path, so that you can require from it directly. E.g. `require('components/modal')`, assuming your src folder contains a 'components' folder. This is of course *in addition* to node_modules. All of your transforms / babel plugins will run on these modules without issue (often there are problems with this if you try to use symlinks from node_modules).
