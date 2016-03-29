@@ -3,5 +3,6 @@ node_js:
   - "5"
 sudo: false
 install:
-    - npm install -g babel
+    - npm install -g babel-cli
+    - npm install
 script: "make test"
