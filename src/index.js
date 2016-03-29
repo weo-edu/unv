@@ -9,7 +9,7 @@ import build from './build'
  * Exports
  */
 
-export {
+export default {
   serve,
   build
 }

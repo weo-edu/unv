@@ -3,34 +3,20 @@
  */
 
 import through from 'through2'
-import path from 'path'
-import sha from 'sha1'
-import fs from 'fs'
+import urify from './urify'
+
+const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg']
 
 /**
  * Assetify
  */
 
-function assetify ({assets, exts, base = '/assets/'}) {
+function assetify (onAsset, exts = defaultExts) {
   const extRe = new RegExp('\\.(?:' + exts.join('|') + ')$')
 
-  return {
-    browser () {
-      return file => extRe.test(file)
-        ? transform(file)
-        : through()
-    },
-    node () {
-      // hook require
-      exts.forEach(ext => require.extensions['.' + ext] = handleExt(ext))
-    }
-  }
-
-  function handleExt (ext) {
-    return (module, file) => {
-      return urify(fs.readFileSync(file), file)
-    }
-  }
+  return file => extRe.test(file)
+    ? transform(file)
+    : through()
 
   function transform (file) {
     const buffers = []
@@ -40,19 +26,14 @@ function assetify ({assets, exts, base = '/assets/'}) {
         cb()
       },
       function (cb) {
-        this.push(urify(Buffer.concat(buffers), file))
+        let url = onAsset(file, Buffer.concat(buffers))
+        this.push(`module.exports = "${url}"`)
         cb()
       }
     )
   }
 
-  function urify (contents, file) {
-    const hashed = sha(contents) + path.extname(file)
-    const url = path.join(base, hashed)
-    assets[url] = file
 
-    return `module.exports = "${url}"`
-  }
 }
 
 /**

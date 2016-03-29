@@ -9,42 +9,63 @@ var path = require('path')
 var unv = require('..')
 var fs = require('fs')
 
-
 /**
  * CLI
  */
 
 var args = minimist(process.argv.slice(2))
 var cmd = args._[0]
-
-var modules = args.modules
-if (modules) configurePaths(path.resolve(process.cwd(), modules))
+var opts = parseOpts()
 
 // Enable babel by default when used from the command line
 require('babel-register')
 
-if (cmd === 'dev') {
-  var client = args.client
-  var server = args.server
-  var port = args.port || 3000
+switch(cmd) {
+  case 'dev': return dev(opts)
+  case 'build': return build(opts)
+  case default: return unknown()
+}
 
-  if (!client) client = tryDefaults('client.js')
-  if (!client) client = tryDefaults('client/')
-  if (!server) server = tryDefaults('server.js')
-  if (!server) server = tryDefaults('server/')
 
+// commands
+function dev ({client, server, port}) {
   unv.serve({
     client,
     server,
-    port
+    port,
+    watch: true
   })
-} else {
+}
+
+function build({client, server}) {
+  unv.build({client, server})
+}
+
+function unknown () {
   console.log('Unrecognized command')
 }
 
 /**
  * Helpers
  */
+
+function parseOpts () {
+  var modules = args.modules
+  if (modules) configurePaths(path.resolve(process.cwd(), modules))
+
+  var client = args.client
+  if (!client) client = tryDefaults('client.js')
+  if (!client) client = tryDefaults('client/')
+
+  var server = args.server
+  if (!server) server = tryDefaults('server.js')
+  if (!server) server = tryDefaults('server/')
+  if (!server) resolve(__dirname + '/../src/defaultIndex.js')
+
+  var port = args.port || 3000
+
+  return {modules, client, server, port}
+}
 
 /**
  * Setup requires from your project's root
