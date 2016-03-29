@@ -30,8 +30,6 @@
     "envify": "^3.4.0",
     "errorify": "^0.3.1",
     "koa": "^1.1.2",
-    "koa-route": "^2.4.2",
-    "koa-send": "github:ashaffer/send",
     "minimist": "^1.2.0",
     "mz": "^2.3.1",
     "sha1": "^1.1.1",

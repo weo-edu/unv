@@ -2,12 +2,12 @@
  * Imports
  */
 
-import route from 'koa-route'
-import {extname, basename, resolve} from 'path'
 import koa from 'koa'
+
 import stream from '@f/promise-stream'
 import toPromise from '@f/to-promise'
 import vm from 'vm'
+import {extname, basename, resolve} from 'path'
 
 import bundleClient from './bundleClient'
 import bundleServer from './bundleServer'
@@ -25,8 +25,6 @@ const ENTRY = 'weo.js'
  */
 
 function serve ({client, server, port = 3000, watch = false}) {
-  server = server ? resolve(process.cwd(), server) : './defaultIndex'
-
   /**
    * Constants
    */
