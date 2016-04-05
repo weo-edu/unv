@@ -6,8 +6,8 @@ import koa from 'koa'
 
 import stream from '@f/promise-stream'
 import toPromise from '@f/to-promise'
-import vm from 'vm'
-import {extname, basename, resolve} from 'path'
+import sourceMap from 'source-map-stack'
+import {extname, basename, resolve, dirname} from 'path'
 
 import bundleClient from './bundleClient'
 import bundleServer from './bundleServer'
@@ -54,8 +54,14 @@ function serve ({client, server, port = 3000, watch = false}) {
 
   app.use(function * () {
     let {url, headers} = this
-    let render = yield stream.wait(rendererStream)
-    this.body = yield toPromise(render({url, headers}))
+    let {render, map} = yield stream.wait(rendererStream)
+    try {
+      this.body = yield toPromise(render({url, headers}))
+    } catch(e) {
+      console.error()
+      console.error(sourceMap.stack(map, e, dirname(server)))
+    }
+
   })
 
   /**

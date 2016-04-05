@@ -15,7 +15,7 @@ test('should bundle server', (t) => {
   let server = bundleServer(assets, './test/app/server.js', a.entry.path)
 
   let renderStream = renderer(server)
-  renderStream.wait().then(function (render) {
+  renderStream.wait().then(function ({render, map}) {
     let html = render({})
     let $ = cheerio.load(html)
     t.equal($('title').text(), 'Weo')

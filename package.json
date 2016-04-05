@@ -18,6 +18,7 @@
     "@f/object-to-promise": "^1.1.3",
     "@f/pending-value": "^1.0.0",
     "@f/promise-stream": "^1.1.3",
+    "@f/require-content": "^1.0.1",
     "babel-plugin-transform-react-jsx": "^6.6.5",
     "babel-preset-es2015-without-regenerator": "^1.0.1",
     "babel-preset-stage-2": "^6.5.0",
@@ -33,6 +34,7 @@
     "minimist": "^1.2.0",
     "mz": "^2.3.1",
     "sha1": "^1.1.1",
+    "source-map-stack": "^0.1.3",
     "source-map-support": "^0.4.0",
     "watchify": "^3.7.0"
   },

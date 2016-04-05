@@ -23,7 +23,7 @@ function bundle (assets, server, entry, base = '/assets') {
     transform: [babelify, assetify(getUrl), envify(), brfs],
     node: true,
     entries: server,
-    standalone: 'default'
+    standalone: 'render'
   })
 
   function getUrl(file, content) {

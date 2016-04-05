@@ -6,7 +6,7 @@
 
 var minimist = require('minimist')
 var path = require('path')
-var unv = require('..')
+var unv = require('..').default
 var fs = require('fs')
 
 /**
@@ -23,22 +23,18 @@ require('babel-register')
 switch(cmd) {
   case 'dev': return dev(opts)
   case 'build': return build(opts)
-  case default: return unknown()
+  default: return unknown()
 }
 
 
 // commands
-function dev ({client, server, port}) {
-  unv.serve({
-    client,
-    server,
-    port,
-    watch: true
-  })
+function dev (opts) {
+  opts.watch = true
+  unv.serve(opts)
 }
 
-function build({client, server}) {
-  unv.build({client, server})
+function build(opts) {
+  unv.build(opts)
 }
 
 function unknown () {
@@ -60,11 +56,11 @@ function parseOpts () {
   var server = args.server
   if (!server) server = tryDefaults('server.js')
   if (!server) server = tryDefaults('server/')
-  if (!server) resolve(__dirname + '/../src/defaultIndex.js')
+  if (!server) path.resolve(__dirname + '/../src/defaultIndex.js')
 
   var port = args.port || 3000
 
-  return {modules, client, server, port}
+  return {modules: modules, client: client, server: server, port: port}
 }
 
 /**
