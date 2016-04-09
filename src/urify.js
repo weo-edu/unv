@@ -12,7 +12,7 @@ function urify (base, file, contents) {
     if (isUndefined(contents)) {
       throw new Error('content buffer required')
     }
-    let ext = path.extname(file)
+    const ext = path.extname(file)
     return path.join(base, path.basename(file).slice(0, -ext.length) + '-' + sha(contents) + ext)
   } else {
     return contents.then(function (c) {

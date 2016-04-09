@@ -11,7 +11,7 @@ test('should render index', function (t) {
   let app = unv.serve({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    entry: 'weo.js'
+    name: 'weo.js'
   })
 
   request(app).get('/test').end(function (err, res) {
@@ -23,15 +23,32 @@ test('should render index', function (t) {
 
 })
 
+test('should throw error', function (t) {
+  t.plan(2)
+  let app = unv.serve({
+    client: './test/app/client.js',
+    server: './test/app/server.js',
+    name: 'weo.js'
+  })
+
+  request(app).get('/throw').end(function (err, res) {
+    let $ = cheerio.load(res.text)
+    t.equal($('title').text(), 'Error - 500')
+    t.ok($('code').text().indexOf('Error: woot') >= 0)
+    app.close()
+  })
+
+})
+
 test('should render entry asset', function (t) {
   t.plan(2)
   let app = unv.serve({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    entry: 'weo.js'
+    name: 'weo.js'
   })
 
-  request(app).get(assets.entry.url).end(function (err, res) {
+  request(app).get(assets.client.url).end(function (err, res) {
     t.ok(res.headers['content-type'].indexOf('application/javascript') >= 0)
     t.ok(res.text.indexOf('vdux/dom') >= 0)
     app.close()
@@ -44,7 +61,7 @@ test('should render elliot asset', function (t) {
   let app = unv.serve({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    entry: 'weo.js'
+    name: 'weo.js'
   })
 
   request(app).get(assets.elliot.url).end(function (err, res) {

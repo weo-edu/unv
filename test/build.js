@@ -22,13 +22,13 @@ test('should build assets', co.wrap(function * (t) {
   yield unv.build({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    entry: 'weo.js',
-    assetsPath: './test/assets',
-    handlerPath: './test/assets/index.js'
+    name: 'weo.js',
+    dir: './test/assets',
+    handler: './test/assets/index.js'
   })
 
   t.ok(yield fs.exists(path.join('./test', assets.elliot.url)))
-  t.ok(yield fs.exists(path.join('./test', assets.entry.url)))
+  t.ok(yield fs.exists(path.join('./test', assets.client.url)))
 
   let render = require('./assets/index')
   let $ = cheerio.load(render({}))

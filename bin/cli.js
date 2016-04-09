@@ -1,31 +1,44 @@
 #!/usr/bin/env node
 
+// Enable babel by default when used from the command line
+require('babel-register')
+require('envitro')()
+
 /**
  * Imports
  */
 
-var minimist = require('minimist')
-var path = require('path')
-var unv = require('..').default
+var Switch = require('@f/switch')
 var fs = require('fs')
+var minimist = require('minimist')
+var optStack = require('opt-stack')
+var path = require('path')
+
+var unv = require('..').default
 
 /**
  * CLI
  */
 
-var args = minimist(process.argv.slice(2))
-var cmd = args._[0]
-var opts = parseOpts()
+var cmd = process.argv[1]
+var opts = optStack('unv', {
+  client: defaultClientPath(),
+  server: defaultServerPath(),
+  modules: defaultModulePath(),
+  name: defaultName(),
+  port: 3000,
+  base: '/assets'
+})
 
-// Enable babel by default when used from the command line
-require('babel-register')
-
-switch(cmd) {
-  case 'dev': return dev(opts)
-  case 'build': return build(opts)
-  default: return unknown()
+if (opts.modules) {
+  opts.modules = configurePaths(path.resolve(process.cwd(), opts.modules))
 }
 
+Switch({
+  dev: dev,
+  build: build,
+  default: usage
+})(cmd, opts)
 
 // commands
 function dev (opts) {
@@ -37,30 +50,50 @@ function build(opts) {
   unv.build(opts)
 }
 
-function unknown () {
-  console.log('Unrecognized command')
+function usage (cmd) {
+  if (cmd) {
+    console.error(`Error: unknown commanf "${cmd}" for "unv"`)
+  }
+  const usage = `
+  Usage:
+    unv [cmd]
+
+  Commands:
+
+    build     Build assets and lambda server handler
+    dev       Start up dev server
+
+  Flags:
+
+    -client   Client entry point
+    -server   Server entry point
+    -modules  Local modules dirctory
+    -name     Name of client build
+    -port     Port to run dev server on
+    -base     Base url for assets
+    -dir      Director to put assets on build
+    -handler  Path to put lambda handler on build
+  `
+  console.log(usage)
 }
 
 /**
  * Helpers
  */
 
-function parseOpts () {
-  var modules = args.modules
-  if (modules) configurePaths(path.resolve(process.cwd(), modules))
+function defaultClientPath () {
+  return tryDefaults('client.js') || tryDefaults('client/')
+}
 
-  var client = args.client
-  if (!client) client = tryDefaults('client.js')
-  if (!client) client = tryDefaults('client/')
+function defaultServerPath () {
+  return tryDefaults('server.js')
+    || tryDefaults('server/')
+    || path.resolve(__dirname + '/../src/defaultIndex.js')
+}
 
-  var server = args.server
-  if (!server) server = tryDefaults('server.js')
-  if (!server) server = tryDefaults('server/')
-  if (!server) path.resolve(__dirname + '/../src/defaultIndex.js')
-
-  var port = args.port || 3000
-
-  return {modules: modules, client: client, server: server, port: port}
+function defaultName () {
+  var name = optStack.packJson('name')
+  return name || 'build'
 }
 
 /**

@@ -1,14 +1,13 @@
 import stream from '@f/promise-stream'
 import vm from 'vm'
 import requireContent from '@f/require-content'
-import sourceMap from 'source-map-stack'
+import {get} from 'source-map-stack'
 
 function renderer (serverStream) {
-  return stream.map(function (server) {
-    var render =  requireContent(server)
-    var map = sourceMap.get(server)
-    return {render, map}
-  }, serverStream)
+  return stream.map(server => ({
+    render: requireContent(server),
+    sourceMap: get(server)
+  }), serverStream)
 }
 
 export default renderer

@@ -13,7 +13,7 @@ function assetStream (base) {
   return {addFile, assets}
 
   function addFile (file, content, getStat = true) {
-    let url = urify(base, file, content)
+    const url = urify(base, file, content)
     assetStream(objToPromise({
       file,
       content,

@@ -14,13 +14,12 @@ import path from 'path'
 import assetStream from './assets'
 import assetify from './assetify'
 
-
 /**
  * Bundler
  */
 
-function bundle (client, entry, base = '/assets', watch=false) {
-  let {addFile, assets} = assetStream(base)
+function bundle (client, name = 'build.js', base = '/assets', watch = false) {
+  const {addFile, assets} = assetStream(base)
   const b = browserify({
     entries: client,
     packageCache: {},
@@ -37,7 +36,7 @@ function bundle (client, entry, base = '/assets', watch=false) {
   return assets
 
   function bundle () {
-    addFile(entry, toPromise(b.bundle.bind(b)), false)
+    addFile(name, toPromise(b.bundle.bind(b)), false)
   }
 }
 

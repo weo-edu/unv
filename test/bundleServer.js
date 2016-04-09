@@ -11,8 +11,8 @@ var a = require('./assets.json')
 
 test('should bundle server', (t) => {
   t.plan(2)
-  let assets = bundleClient('./test/app/client.js', a.entry.path)
-  let server = bundleServer(assets, './test/app/server.js', a.entry.path)
+  let assets = bundleClient('./test/app/client.js', a.client.path)
+  let server = bundleServer(assets, './test/app/server.js', a.client.path)
 
   let renderStream = renderer(server)
   renderStream.wait().then(function ({render, map}) {

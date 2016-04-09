@@ -4,6 +4,7 @@
 
 import through from 'through2'
 import urify from './urify'
+import fs from 'fs'
 
 const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg']
 
@@ -19,14 +20,13 @@ function assetify (onAsset, exts = defaultExts) {
     : through()
 
   function transform (file) {
-    const buffers = []
     return through(
       (buf, enc, cb) => {
-        buffers.push(buf)
         cb()
       },
       function (cb) {
-        let url = onAsset(file, Buffer.concat(buffers))
+        var content = fs.readFileSync(file)
+        let url = onAsset(file, content)
         this.push(`module.exports = "${url}"`)
         cb()
       }

@@ -1,10 +1,10 @@
 {
-  "entry": {
+  "client": {
     "path": "weo.js",
-    "url": "/assets/weo-0d86c61b4e0ffaf53467f44adf12171696513446.js"
+    "url": "/assets/weo-5bafe664678af3f56c07b64ee08684feeec073f8.js"
   },
   "elliot": {
     "path": "app/elliot.jpg",
-    "url": "/assets/elliot-fd41e99d33f10e07b874ecf813cc3afe699e2ff6.jpg"
+    "url": "/assets/elliot-159224f8c3d1dbed6bada97e412fb63c894469f2.jpg"
   }
 }

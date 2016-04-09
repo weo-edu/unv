@@ -36,6 +36,9 @@ const {render} = vdux({reducer, initialState})
  */
 
 function handler (event) {
+  if (event.url === '/throw') {
+    throw new Error('woot')
+  }
   var state = {counter: 0}
   return page(render(<App value={state.counter} url={event.url}/>), state)
 }
@@ -52,7 +55,7 @@ function page (html, state) {
         <style>
           ${style}
         </style>
-        <script type='text/javascript' src='${process.env.JS_ENTRY}'></script>
+        <script type='text/javascript' src='${process.env.CLIENT_JS_BUILD}'></script>
         <script type='text/javascript'>
           window.__initialState__ = ${JSON.stringify(state)}
         </script>

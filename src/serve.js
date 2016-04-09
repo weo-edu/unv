@@ -3,10 +3,12 @@
  */
 
 import koa from 'koa'
+import koaError from 'koa-error'
 
 import stream from '@f/promise-stream'
 import toPromise from '@f/to-promise'
-import sourceMap from 'source-map-stack'
+import logError from '@f/log-error'
+import {stack} from 'source-map-stack'
 import {extname, basename, resolve, dirname} from 'path'
 
 import bundleClient from './bundleClient'
@@ -14,32 +16,29 @@ import bundleServer from './bundleServer'
 import renderer from './renderer'
 
 /**
- * Constants
- */
-
-const ASSETS_BASE = '/assets/'
-const ENTRY = 'weo.js'
-
-/**
  * Serve
  */
 
-function serve ({client, server, port = 3000, watch = false}) {
+function serve ({client, server, name, base='/assets', port = 3000, watch = false}) {
   /**
    * Constants
    */
 
   const app = koa()
-  const assetStream = bundleClient(client, ENTRY, ASSETS_BASE, watch)
-  const rendererStream = renderer(bundleServer(assetStream, server, ENTRY, ASSETS_BASE))
+  const assetStream = bundleClient(client, name, base, watch)
+  const rendererStream = renderer(bundleServer(assetStream, server, name, base, watch))
+
+  app.onerror = logError
+
+  app.use(koaError())
 
   /**
    * Server
    */
 
   app.use(function * (next) {
-    let url = this.url
-    if (url.startsWith(ASSETS_BASE)) {
+    const url = this.url
+    if (url.startsWith(base)) {
       let {assets} = yield stream.wait(assetStream)
       let asset = assets[url]
       if (asset) {
@@ -53,13 +52,13 @@ function serve ({client, server, port = 3000, watch = false}) {
   })
 
   app.use(function * () {
-    let {url, headers} = this
-    let {render, map} = yield stream.wait(rendererStream)
+    const {url, headers} = this
+    const {render, sourceMap} = yield stream.wait(rendererStream)
     try {
       this.body = yield toPromise(render({url, headers}))
     } catch(e) {
-      console.error()
-      console.error(sourceMap.stack(map, e, dirname(server)))
+      e.stack = stack(sourceMap, e, process.cwd())
+      throw e
     }
 
   })
