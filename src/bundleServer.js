@@ -4,6 +4,7 @@
 
 import stream from '@f/promise-stream'
 import toPromise from '@f/thunk-to-promise'
+import elapsed from '@f/elapsed-time'
 
 import browserify from 'browserify'
 import babelify from 'babelify'
@@ -46,9 +47,12 @@ function bundle (assets, server, name = 'build.js', base = '/assets', watch = fa
 
   return stream.combine(({files}, rebuild) => {
     if (files[name]) {
-      console.log('building server...')
       process.env['CLIENT_JS_BUILD'] = files[name].url
-      return toPromise(b.bundle.bind(b))
+      const time = elapsed()
+      return toPromise(b.bundle.bind(b)).then(function (content) {
+        console.log(`bundled server (${time()}ms)`)
+        return content
+      })
     }
   }, [assets, rebuild])
 

@@ -3,6 +3,7 @@
  */
 
 import toPromise from '@f/thunk-to-promise'
+import elapsed from '@f/elapsed-time'
 
 import browserify from 'browserify'
 import hmr from 'browserify-hmr'
@@ -36,7 +37,12 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   return assets
 
   function bundle () {
-    addFile(name, toPromise(b.bundle.bind(b)), false)
+    var time = elapsed()
+    var clientBuild = toPromise(b.bundle.bind(b)).then(function (content) {
+      console.log(`bundled client (${time()}ms)`)
+      return content
+    })
+    addFile(name, clientBuild, false)
   }
 }
 

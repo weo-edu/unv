@@ -20,11 +20,10 @@ var unv = require('..').default
  * CLI
  */
 
-var cmd = process.argv[1]
+var cmd = process.argv[2]
 var opts = optStack('unv', {
   client: defaultClientPath(),
   server: defaultServerPath(),
-  modules: defaultModulePath(),
   name: defaultName(),
   port: 3000,
   base: '/assets'
@@ -52,7 +51,7 @@ function build(opts) {
 
 function usage (cmd) {
   if (cmd) {
-    console.error(`Error: unknown commanf "${cmd}" for "unv"`)
+    console.error(`Error: unknown command "${cmd}" for "unv"`)
   }
   const usage = `
   Usage:
@@ -65,14 +64,14 @@ function usage (cmd) {
 
   Flags:
 
-    -client   Client entry point
-    -server   Server entry point
-    -modules  Local modules dirctory
-    -name     Name of client build
-    -port     Port to run dev server on
-    -base     Base url for assets
-    -dir      Director to put assets on build
-    -handler  Path to put lambda handler on build
+    --client   Client entry point
+    --server   Server entry point
+    --modules  Local modules dirctory
+    --name     Name of client build
+    --port     Port to run dev server on
+    --base     Base url for assets
+    --dir      Director to put assets on build
+    --handler  Path to put lambda handler on build
   `
   console.log(usage)
 }
