@@ -6,7 +6,7 @@ import through from 'through2'
 import urify from './urify'
 import fs from 'fs'
 
-const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg']
+const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg', 'woff', 'jpeg', 'jpeg2', 'eot', 'ttf']
 
 /**
  * Assetify
