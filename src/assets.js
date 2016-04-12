@@ -1,11 +1,15 @@
-import stream from '@f/promise-stream'
-import isPromise from '@f/is-promise'
-import zip from '@f/zip-obj'
-import thunkToPromise from '@f/thunk-to-promise'
+/**
+ * Imports
+ */
+
 import objToPromise from '@f/object-to-promise'
-import fs from 'mz/fs'
-import path from 'path'
+import stream from '@f/promise-stream'
 import urify from './urify'
+import fs from 'mz/fs'
+
+/**
+ * Asset stream
+ */
 
 function assetStream (base) {
   const assetStream = stream()
@@ -14,6 +18,7 @@ function assetStream (base) {
 
   function addFile (file, content, getStat = true) {
     const url = urify(base, file, content)
+
     assetStream(objToPromise({
       file,
       content,
@@ -24,7 +29,7 @@ function assetStream (base) {
   }
 }
 
-var assetsReduce = _ => {
+function assetsReduce () {
   const files = {}
   const assets = {}
   return asset => {
@@ -39,6 +44,8 @@ var assetsReduce = _ => {
   }
 }
 
-
+/**
+ * Exports
+ */
 
 export default assetStream

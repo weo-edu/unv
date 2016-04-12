@@ -57,7 +57,7 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
     try {
       this.body = yield toPromise(render({url, headers}))
     } catch(e) {
-      e.stack = stack(sourceMap, e, process.cwd())
+      e.stack = stack(sourceMap(), e, process.cwd())
       throw e
     }
 
@@ -67,10 +67,12 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
    * Listen
    */
 
-  return app.listen(port, function () {
-    console.log('Listening on port', port)
-  })
+  return app.listen(port, () => console.log('Listening on port:', port))
 }
+
+/**
+ * Helpers
+ */
 
 function send (ctx, content, path, stats) {
   if (!ctx.response.get('Last-Modified')) ctx.set('Last-Modified', stats.mtime.toUTCString())

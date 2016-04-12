@@ -6,6 +6,10 @@ import through from 'through2'
 import urify from './urify'
 import fs from 'fs'
 
+/**
+ * Constants
+ */
+
 const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg', 'woff', 'jpeg', 'jpeg2', 'eot', 'ttf']
 
 /**
@@ -25,15 +29,16 @@ function assetify (onAsset, exts = defaultExts) {
         cb()
       },
       function (cb) {
-        var content = fs.readFileSync(file)
-        let url = onAsset(file, content)
-        this.push(`module.exports = "${url}"`)
-        cb()
+        fs.readFile(file, (err, content) => {
+          if (err) return cb(err)
+
+          const url = onAsset(file, content)
+          this.push(`module.exports = "${url}"`)
+          cb()
+        })
       }
     )
   }
-
-
 }
 
 /**

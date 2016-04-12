@@ -3,23 +3,33 @@
  */
 
 import stream from '@f/promise-stream'
-import map from '@f/map'
 import toPromise from '@f/to-promise'
-import fs from 'mz/fs'
+import rimraf from 'rimraf'
+import mkdirp from 'mkdirp'
+import map from '@f/map'
 import path from 'path'
+import fs from 'mz/fs'
 import co from 'co'
 
 import bundleClient from './bundleClient'
 import bundleServer from './bundleServer'
 
+/**
+ * Build
+ */
+
 function build ({client, server, name, base, dir = './assets', handler = './functions/index/index.js' }) {
+  // Setup directories and clean
+  prepare(dir, path.dirname(handler))
+
+  // Start the bundle streams
   const assetStream = bundleClient(client, name, base)
   const serverBundle = bundleServer(assetStream, server, name, base)
 
   return co(function * () {
-    let {assets} = yield stream.wait(assetStream)
+    const {assets} = yield stream.wait(assetStream)
     yield map(co.wrap(function * (asset, url) {
-      let assetPath = path.join(dir, path.basename(url))
+      const assetPath = path.join(dir, path.basename(url))
       yield fs.writeFile(assetPath, asset.content)
       if (asset.stat.mtime) {
         yield fs.utimes(assetPath, asset.stat.atime, asset.stat.mtime)
@@ -28,10 +38,23 @@ function build ({client, server, name, base, dir = './assets', handler = './func
 
     const server = yield stream.wait(serverBundle)
     yield fs.writeFile(handler, server)
-  }).catch(function (err) {
+  }).catch(err => {
     console.error('Build error:')
     console.error(err.stack)
   })
 }
+
+function prepare (assetDir, handlerDir) {
+  // Make directories
+  mkdirp.sync(assetDir)
+  mkdirp.sync(handlerDir)
+
+  // Clean
+  rimraf.sync(path.join(assetDir, '*'))
+}
+
+/**
+ * Exports
+ */
 
 export default build

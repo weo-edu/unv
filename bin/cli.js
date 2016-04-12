@@ -92,7 +92,7 @@ function defaultServerPath () {
 
 function defaultName () {
   var name = optStack.packJson('name')
-  return name || 'build'
+  return (name || 'build') + '.js'
 }
 
 /**

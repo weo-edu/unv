@@ -6,39 +6,62 @@ import toPromise from '@f/thunk-to-promise'
 import elapsed from '@f/elapsed-time'
 
 import browserify from 'browserify'
-import hmr from 'browserify-hmr'
 import envify from 'envify/custom'
+import rollupify from 'rollupify'
+import uglifyify from 'uglifyify'
+import hmr from 'browserify-hmr'
 import babelify from 'babelify'
 import watchify from 'watchify'
-import path from 'path'
 
 import assetStream from './assets'
 import assetify from './assetify'
 
 /**
- * Bundler
+ * Client bundler
  */
 
 function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   const {addFile, assets} = assetStream(base)
+  const plugin = []
+  const transform = [
+    babelify,
+    assetify(addFile),
+    envify()
+  ]
+
+  if (!watch) {
+    // transform.unshift(rollupify)
+    transform.push([uglifyify, {
+      sourcemap: false,
+      global: true,
+      mangle: {
+        toplevel: true,
+        screw_ie8: true
+      }
+    }])
+  } else {
+    plugin.push([watchify, {delay: 0}])
+    plugin.push(hmr)
+  }
+
   const b = browserify({
     entries: client,
     packageCache: {},
     cache: {},
-    debug: true,
-    transform: [babelify, assetify(addFile), envify()],
-    plugin: watch ? [[watchify, {delay: 0}], hmr] : []
+    debug: watch,
+    builtins: false,
+    transform,
+    plugin
   })
 
   b.on('update', bundle)
-
   bundle()
 
   return assets
 
   function bundle () {
-    var time = elapsed()
-    var clientBuild = toPromise(b.bundle.bind(b)).then(function (content) {
+    const time = elapsed()
+    const clientBuild = toPromise(b.bundle.bind(b)).then(content => {
       console.log(`bundled client (${time()}ms)`)
       return content
     })

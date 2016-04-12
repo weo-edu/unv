@@ -7,20 +7,44 @@ import toPromise from '@f/thunk-to-promise'
 import elapsed from '@f/elapsed-time'
 
 import browserify from 'browserify'
-import babelify from 'babelify'
 import envify from 'envify/custom'
-import brfs from 'brfs'
+import rollupify from 'rollupify'
+import uglifyify from 'uglifyify'
 import watchify from 'watchify'
+import babelify from 'babelify'
+import brfs from 'brfs'
 
 import assetify from './assetify'
 import urify from './urify'
 
+/**
+ * Server bundler
+ */
+
 function bundle (assets, server, name = 'build.js', base = '/assets', watch = false) {
+  const plugin = []
+  const transform = [babelify, assetify(getUrl), envify(), brfs]
+
+  if (!watch) {
+    // transform.unshift(rollupify)
+    transform.push([uglifyify, {
+      sourcemap: false,
+      global: true,
+      mangle: {
+        toplevel: true,
+        screw_ie8: true
+      }
+    }])
+  } else {
+    plugin.push(watchify)
+  }
+
   const b = browserify({
     packageCache: {},
     cache: {},
-    debug: true,
-    transform: [babelify, assetify(getUrl), envify(), brfs],
+    debug: watch,
+    transform,
+    plugin,
     bare: true,
     browserField: false,
     builtins: false,
@@ -31,31 +55,27 @@ function bundle (assets, server, name = 'build.js', base = '/assets', watch = fa
       process: function () {}
     },
     entries: server,
-    standalone: 'render',
-    plugin: watch ? [watchify] : []
+    standalone: 'render'
   })
 
-  const rebuild = stream(true)
-
-  b.on('update', function () {
-    rebuild(true)
-  })
-
-  function getUrl(file, content) {
+  function getUrl (file, content) {
     return urify(base, file, content)
   }
 
-  return stream.combine(({files}, rebuild) => {
+  return stream.map(({files}) => {
     if (files[name]) {
       process.env['CLIENT_JS_BUILD'] = files[name].url
       const time = elapsed()
-      return toPromise(b.bundle.bind(b)).then(function (content) {
+      return toPromise(b.bundle.bind(b)).then(content => {
         console.log(`bundled server (${time()}ms)`)
         return content
       })
     }
-  }, [assets, rebuild])
-
+  }, assets)
 }
+
+/**
+ * Exports
+ */
 
 export default bundle
