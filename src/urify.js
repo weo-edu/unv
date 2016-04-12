@@ -20,7 +20,6 @@ function urify (base, file, contents) {
       throw new Error('content buffer required')
     }
 
-    console.log('file', file)
     const ext = path.extname(file)
     return path.join(base,
       path.basename(file).slice(0, -ext.length)
