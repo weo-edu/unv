@@ -49,7 +49,6 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
     packageCache: {},
     cache: {},
     debug: watch,
-    builtins: false,
     transform,
     plugin
   })
