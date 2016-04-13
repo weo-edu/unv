@@ -14,7 +14,6 @@
     "postversion": "git push && git push --tags && npm publish --access=public"
   },
   "dependencies": {
-    "@f/elapsed-time": "^1.0.0",
     "@f/map": "^1.5.3",
     "@f/object-to-promise": "^1.1.3",
     "@f/pending-value": "^1.0.0",
@@ -32,7 +31,7 @@
     "co": "^4.6.0",
     "envify": "^3.4.0",
     "envitro": "^1.0.0",
-    "errorify": "^0.3.1",
+    "escape-regexp": "0.0.1",
     "farmhash": "^1.1.1",
     "koa": "^1.1.2",
     "koa-error": "^1.1.3",

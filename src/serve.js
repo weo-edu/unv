@@ -37,10 +37,21 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
    */
 
   app.use(function * (next) {
-    const url = this.url
+    const {render, sourceMap} = yield stream.wait(rendererStream)
+    const {assets} = yield stream.wait(assetStream)
+
+    this.assets = assets
+    this.render = render
+    this.sourceMap = sourceMap
+
+    yield next
+  })
+
+  app.use(function * (next) {
+    const {url, assets} = this
     if (url.startsWith(base)) {
-      let {assets} = yield stream.wait(assetStream)
-      let asset = assets[url]
+      const asset = assets[url]
+
       if (asset) {
         send(this, asset.content, asset.file, asset.stat)
       } else {
@@ -52,15 +63,14 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
   })
 
   app.use(function * () {
-    const {url, headers} = this
-    const {render, sourceMap} = yield stream.wait(rendererStream)
+    const {url, headers, render, sourceMap} = this
+
     try {
       this.body = yield toPromise(render({url, headers}))
     } catch(e) {
       e.stack = stack(sourceMap(), e, process.cwd())
       throw e
     }
-
   })
 
   /**

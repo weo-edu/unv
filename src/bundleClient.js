@@ -3,7 +3,6 @@
  */
 
 import toPromise from '@f/thunk-to-promise'
-import elapsed from '@f/elapsed-time'
 
 import browserify from 'browserify'
 import envify from 'envify/custom'
@@ -59,9 +58,9 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   return assets
 
   function bundle () {
-    const time = elapsed()
+    console.time('bundled client')
     const clientBuild = toPromise(b.bundle.bind(b)).then(content => {
-      console.log(`bundled client (${time()}ms)`)
+      console.timeEnd('bundled client')
       return content
     })
     addFile(name, clientBuild, false)
