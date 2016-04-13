@@ -28,6 +28,7 @@
     "brfs": "^1.4.3",
     "browserify": "github:ashaffer/node-browserify",
     "browserify-hmr": "github:ashaffer/browserify-hmr",
+    "cached-path-relative": "^1.0.0",
     "co": "^4.6.0",
     "envify": "^3.4.0",
     "envitro": "^1.0.0",

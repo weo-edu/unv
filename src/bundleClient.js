@@ -3,6 +3,7 @@
  */
 
 import toPromise from '@f/thunk-to-promise'
+import 'cached-path-relative/shim'
 
 import browserify from 'browserify'
 import envify from 'envify/custom'

@@ -5,6 +5,7 @@
 import toPromise from '@f/thunk-to-promise'
 import escapeRegex from 'escape-regexp'
 import stream from '@f/promise-stream'
+import 'cached-path-relative/shim'
 
 import browserify from 'browserify'
 import envify from 'envify/custom'
