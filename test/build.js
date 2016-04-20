@@ -31,15 +31,13 @@ test('should build assets', co.wrap(function * (t) {
 
   t.ok(clientFileExists(yield fs.readdir(path.join('./test'))))
 
-  try {
-    let render = require('./assets/index.js')
-    let $ = cheerio.load(render({}))
-    t.equal($('title').text(), 'Weo')
-    rimraf.sync('test/assets')
-    t.end()
-  } catch (e) {
-    console.log('e', e.stack)
-  }
+
+  let render = require('./assets/index.js')
+  let $ = cheerio.load(render({}))
+  t.equal($('title').text(), 'Weo')
+  rimraf.sync('test/assets')
+  t.end()
+
 }))
 
 const reg = /.*\/assets\/weo-\d{20}.js/
