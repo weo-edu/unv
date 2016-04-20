@@ -30,11 +30,16 @@ test('should build assets', co.wrap(function * (t) {
   t.ok(yield fs.exists(path.join('./test', assets.elliot.url)))
   t.ok(yield fs.exists(path.join('./test', assets.client.url)))
 
-  let render = require('./assets/index')
-  let $ = cheerio.load(render({}))
-  t.equal($('title').text(), 'Weo')
-  rimraf.sync('test/assets')
-  t.end()
+  try {
+    let render = require('./assets/index.js')
+    let $ = cheerio.load(render({}))
+    t.equal($('title').text(), 'Weo')
+    rimraf.sync('test/assets')
+    t.end()
+  } catch (e) {
+    console.log('e', e.stack)
+  }
+
 
 
 }))

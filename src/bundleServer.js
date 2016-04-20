@@ -26,8 +26,11 @@ function bundle (assets, server, name = 'build.js', base = '/assets', watch = fa
   const plugin = []
   const transform = [babelify, assetify(getUrl), envify(), brfs]
 
-  if (!watch) {
-    // transform.unshift(rollupify)
+  if (watch) {
+    plugin.push(watchify)
+  }
+
+  if (process.env.NODE_ENV === 'production') {
     transform.push([uglifyify, {
       sourcemap: false,
       global: true,
@@ -36,14 +39,12 @@ function bundle (assets, server, name = 'build.js', base = '/assets', watch = fa
         screw_ie8: true
       }
     }])
-  } else {
-    plugin.push(watchify)
   }
 
   const b = browserify({
     packageCache: {},
     cache: {},
-    debug: watch,
+    debug: true,
     transform,
     plugin,
     bare: true,
