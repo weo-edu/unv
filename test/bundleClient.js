@@ -25,7 +25,7 @@ test('should bundle client entry', (t) => {
   })
 })
 
-const reg = /\/assets\/weo-\d{20}.js/
+const reg = /\/assets\/weo-\d+.js/
 
 function clientUrlExists (obj) {
   return Object.keys(obj).filter(function (url) {

@@ -60,7 +60,7 @@ test('should render entry asset', function (t) {
     })
   })
 
-  const reg = /\/assets\/weo-\d{20}.js/
+  const reg = /\/assets\/weo-\d+.js/
 
   function getClientUrl (obj) {
     return Object.keys(obj).find(function (url) {
