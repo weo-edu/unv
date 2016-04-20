@@ -28,7 +28,8 @@ test('should build assets', co.wrap(function * (t) {
   })
 
   t.ok(yield fs.exists(path.join('./test', assets.elliot.url)))
-  t.ok(yield fs.exists(path.join('./test', assets.client.url)))
+
+  t.ok(clientFileExists(yield fs.readdir(path.join('./test'))))
 
   try {
     let render = require('./assets/index.js')
@@ -39,7 +40,12 @@ test('should build assets', co.wrap(function * (t) {
   } catch (e) {
     console.log('e', e.stack)
   }
-
-
-
 }))
+
+const reg = /.*\/assets\/weo-\d{20}.js/
+
+function clientFileExists (files) {
+  return files.filter(function (url) {
+    return reg.test(url)
+  })
+}

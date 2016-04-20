@@ -3,8 +3,9 @@ import request from 'supertest'
 import test from 'tape'
 import cheerio from 'cheerio'
 import unv from '../src'
+import bundleClient from '../src/bundleClient'
 
-var assets = require('./assets.json')
+var a = require('./assets.json')
 
 test('should render index', function (t) {
   t.plan(2)
@@ -48,11 +49,25 @@ test('should render entry asset', function (t) {
     name: 'weo.js'
   })
 
-  request(app).get(assets.client.url).end(function (err, res) {
-    t.ok(res.headers['content-type'].indexOf('application/javascript') >= 0)
-    t.ok(res.text.indexOf('vdux/dom') >= 0)
-    app.close()
+  let assets = bundleClient('./test/app/client.js', a.client.path)
+
+  assets.wait().then(function ({assets, files}) {
+    const clientUrl = getClientUrl(assets)
+    request(app).get(clientUrl).end(function (err, res) {
+      t.ok(res.headers['content-type'].indexOf('application/javascript') >= 0)
+      t.ok(res.text.indexOf('vdux/dom') >= 0)
+      app.close()
+    })
   })
+
+  const reg = /\/assets\/weo-\d{20}.js/
+
+  function getClientUrl (obj) {
+    return Object.keys(obj).find(function (url) {
+      return reg.test(url)
+    })
+  }
+
 
 })
 
@@ -64,7 +79,7 @@ test('should render elliot asset', function (t) {
     name: 'weo.js'
   })
 
-  request(app).get(assets.elliot.url).end(function (err, res) {
+  request(app).get(a.elliot.url).end(function (err, res) {
     t.ok(res.headers['content-type'].indexOf('image/jpeg') >= 0)
 
     app.close()

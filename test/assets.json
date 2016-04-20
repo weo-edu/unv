@@ -1,7 +1,6 @@
 {
   "client": {
-    "path": "weo.js",
-    "url": "/assets/weo-17683072495329128213.js"
+    "path": "weo.js"
   },
   "elliot": {
     "path": "app/elliot.jpg",
