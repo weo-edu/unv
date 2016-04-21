@@ -28,7 +28,7 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   const transform = [
     babelify,
     assetify(addFile),
-    envify()
+    [envify(), {global: true}]
   ]
 
   if (watch) {
