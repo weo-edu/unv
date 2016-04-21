@@ -40,7 +40,7 @@ test('should build assets', co.wrap(function * (t) {
 
 }))
 
-const reg = /.*\/assets\/weo-\d{20}.js/
+const reg = /.*\/assets\/weo-\d+.js/
 
 function clientFileExists (files) {
   return files.filter(function (url) {
