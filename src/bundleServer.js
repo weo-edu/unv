@@ -24,7 +24,12 @@ import urify from './urify'
 
 function bundle (assets, server, name = 'build.js', base = '/assets', watch = false) {
   const plugin = []
-  const transform = [babelify, assetify(getUrl), envify(), brfs]
+  const transform = [
+    babelify,
+    assetify(getUrl),
+    [envify(), {global: true}],
+    brfs
+  ]
 
   if (watch) {
     plugin.push(watchify)
