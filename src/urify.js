@@ -15,7 +15,7 @@ import isUndefined from '@f/is-undefined'
  */
 
 function urify (base, file, contents) {
-  if (!base[base.length - 1] === '/')
+  if (base[base.length - 1] !== '/')
     base = base + '/'
   if (!isPromise(contents)) {
     if (isUndefined(contents)) {
