@@ -2,7 +2,7 @@
   "name": "unv",
   "description": "Universal application dev server and build tool",
   "repository": "git://github.com/weo-edu/unv.git",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "license": "MIT",
   "main": "lib/index.js",
   "bin": {
