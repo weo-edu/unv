@@ -14,6 +14,7 @@
     "postversion": "git push && git push --tags && npm publish --access=public"
   },
   "dependencies": {
+    "@f/log-error": "^1.0.0",
     "@f/map": "^1.5.3",
     "@f/object-to-promise": "^1.1.3",
     "@f/pending-value": "^1.0.0",

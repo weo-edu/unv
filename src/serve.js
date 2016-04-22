@@ -62,16 +62,28 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
     }
   })
 
+  let sourceMap
   app.use(function * () {
-    const {url, headers, render, sourceMap} = this
+    const {url, headers, render} = this
+    sourceMap = this.sourceMap
 
     try {
       this.body = yield toPromise(render({url, headers}))
     } catch(e) {
-      e.stack = stack(sourceMap(), e, process.cwd())
-      throw e
+      handleError(e)
     }
   })
+
+  process.on('uncaughtException', handleError)
+  process.on('unhandledRejection', handleError)
+
+  function handleError (e) {
+    if (e.stack.toString().indexOf('evalmachine') !== -1) {
+      e.stack = stack(sourceMap(), e, process.cwd())
+    }
+
+    logError(e)
+  }
 
   /**
    * Listen
