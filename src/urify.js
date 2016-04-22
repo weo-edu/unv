@@ -26,7 +26,7 @@ function urify (base, file, contents) {
     return base
       + path.basename(file).slice(0, -ext.length)
       + '-'
-      + farmhash.hash64(contents) + ext)
+      + farmhash.hash64(contents) + ext
   } else {
     return contents.then(c => urify(base, file, c))
   }
