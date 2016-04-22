@@ -28,13 +28,22 @@ test('should build assets', co.wrap(function * (t) {
   })
 
   t.ok(yield fs.exists(path.join('./test', assets.elliot.url)))
-  t.ok(yield fs.exists(path.join('./test', assets.client.url)))
 
-  let render = require('./assets/index')
+  t.ok(clientFileExists(yield fs.readdir(path.join('./test'))))
+
+
+  let render = require('./assets/index.js')
   let $ = cheerio.load(render({}))
   t.equal($('title').text(), 'Weo')
   rimraf.sync('test/assets')
   t.end()
 
-
 }))
+
+const reg = /.*\/assets\/weo-\d+.js/
+
+function clientFileExists (files) {
+  return files.filter(function (url) {
+    return reg.test(url)
+  })
+}

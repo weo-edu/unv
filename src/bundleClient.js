@@ -16,6 +16,8 @@ import watchify from 'watchify'
 import assetStream from './assets'
 import assetify from './assetify'
 
+const PRODUCTION = process.env.NODE_ENV === 'production'
+
 /**
  * Client bundler
  */
@@ -26,11 +28,15 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   const transform = [
     babelify,
     assetify(addFile),
-    envify()
+    [envify(), {global: true}]
   ]
 
-  if (!watch) {
-    // transform.unshift(rollupify)
+  if (watch) {
+    plugin.push([watchify, {delay: 0}])
+    plugin.push(hmr)
+  }
+
+  if (PRODUCTION) {
     transform.push([uglifyify, {
       sourcemap: false,
       global: true,
@@ -39,16 +45,14 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
         screw_ie8: true
       }
     }])
-  } else {
-    plugin.push([watchify, {delay: 0}])
-    plugin.push(hmr)
   }
+
 
   const b = browserify({
     entries: client,
     packageCache: {},
     cache: {},
-    debug: watch,
+    debug: !PRODUCTION,
     transform,
     plugin
   })

@@ -15,16 +15,18 @@ import isUndefined from '@f/is-undefined'
  */
 
 function urify (base, file, contents) {
+  if (base[base.length - 1] !== '/')
+    base = base + '/'
   if (!isPromise(contents)) {
     if (isUndefined(contents)) {
       throw new Error('content buffer required')
     }
 
     const ext = path.extname(file)
-    return path.join(base,
-      path.basename(file).slice(0, -ext.length)
-        + '-'
-        + farmhash.hash64(contents) + ext)
+    return base
+      + path.basename(file).slice(0, -ext.length)
+      + '-'
+      + farmhash.hash64(contents) + ext
   } else {
     return contents.then(c => urify(base, file, c))
   }
