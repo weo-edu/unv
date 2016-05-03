@@ -10,7 +10,7 @@ import fs from 'fs'
  * Constants
  */
 
-const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg', 'woff', 'jpeg', 'jpeg2', 'eot', 'ttf']
+const defaultExts = ['png', 'gif', 'ico', 'svg', 'gif', 'jpg', 'woff', 'woff2', 'jpeg', 'jpeg2', 'eot', 'ttf']
 
 /**
  * Assetify
