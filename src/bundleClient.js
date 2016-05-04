@@ -32,7 +32,7 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   ]
 
   if (watch) {
-    plugin.push([watchify, {delay: 0}])
+    plugin.push([watchify, {delay: 200}])
     plugin.push(hmr)
   }
 
