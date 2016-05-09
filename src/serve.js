@@ -71,6 +71,7 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
       this.body = yield toPromise(render({url, headers}))
     } catch(e) {
       handleError(e)
+      throw e
     }
   })
 
