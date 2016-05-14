@@ -45,7 +45,7 @@
     "rollupify": "^0.2.0",
     "source-map-stack": "^0.1.7",
     "uglifyify": "^3.0.1",
-    "watchify": "^3.7.0"
+    "watchify": "github:ashaffer/watchify"
   },
   "devDependencies": {
     "@f/domready": "^1.0.2",
