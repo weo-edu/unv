@@ -99,7 +99,8 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
 
 function send (ctx, content, path, stats) {
   if (!ctx.response.get('Last-Modified')) ctx.set('Last-Modified', stats.mtime.toUTCString())
-  ctx.type = type(path);
+  ctx.set('Cache-Control', 'max-age=2592000')
+  ctx.type = type(path)
   ctx.body = content
 }
 
