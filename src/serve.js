@@ -48,9 +48,9 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
   })
 
   app.use(function * (next) {
-    const {url, assets} = this
-    if (url.startsWith(base)) {
-      const asset = assets[url]
+    const {path, assets} = this
+    if (path.startsWith(base)) {
+      const asset = assets[path]
 
       if (asset) {
         send(this, asset.content, asset.file, asset.stat)
@@ -64,11 +64,11 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
 
   let sourceMap
   app.use(function * () {
-    const {url, headers, render} = this
+    const {path, headers, render} = this
     sourceMap = this.sourceMap
 
     try {
-      this.body = yield toPromise(render({url, headers}))
+      this.body = yield toPromise(render({url: path, headers}))
     } catch(e) {
       handleError(e)
       throw e
