@@ -79,7 +79,7 @@ function serve ({client, server, name, base='/assets', port = 3000, watch = fals
   process.on('unhandledRejection', handleError)
 
   function handleError (e) {
-    if (e.stack.toString().indexOf('evalmachine') !== -1) {
+    if (e.stack && e.stack.toString().indexOf('evalmachine') !== -1) {
       e.stack = stack(sourceMap(), e, process.cwd())
     }
 
