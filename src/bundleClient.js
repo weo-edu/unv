@@ -65,6 +65,7 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
 
   const debouncedBundle = debounce(bundle, 300)
 
+  let updating = false
   b.on('update', rows => {
     shouldDebounce(rows)
       ? debouncedBundle()
@@ -76,9 +77,12 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   return assets
 
   function bundle () {
+    if (updating) return debouncedBundle()
+    updating = true
     console.time('bundled client')
     const clientBuild = toPromise(b.bundle.bind(b)).then(content => {
       console.timeEnd('bundled client')
+      setTimeout(() => updating = false, 500)
       return content
     })
     addFile(name, clientBuild, false)
