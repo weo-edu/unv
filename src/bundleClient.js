@@ -3,6 +3,7 @@
  */
 
 import toPromise from '@f/thunk-to-promise'
+import debounce from '@f/debounce'
 import 'cached-path-relative/shim'
 
 import browserify from 'browserify'
@@ -15,6 +16,10 @@ import watchify from 'watchify'
 
 import assetStream from './assets'
 import assetify from './assetify'
+
+/**
+ * Environment
+ */
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
 
@@ -32,7 +37,8 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
   ]
 
   if (watch) {
-    plugin.push([watchify, {delay: 200}])
+    // Use our own debounce for watchify
+    plugin.push([watchify, {delay: 0}])
     plugin.push(hmr)
   }
 
@@ -57,7 +63,14 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
     plugin
   })
 
-  b.on('update', bundle)
+  const debouncedBundle = debounce(bundle, 300)
+
+  b.on('update', rows => {
+    shouldDebounce(rows)
+      ? debouncedBundle()
+      : bundle()
+  })
+
   bundle()
 
   return assets
@@ -69,6 +82,18 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
       return content
     })
     addFile(name, clientBuild, false)
+  }
+
+  const cwd = process.cwd()
+
+  function shouldDebounce (rows) {
+    // We want to debounce rebundles if we are receiving
+    // an update from a node_module, because if that happens
+    // we are likely to get a batch of spread out file writes
+    // and we don't want to accidentally bundle twice
+    return rows.some(row =>
+      row.indexOf(cwd) === -1
+        || row.indexOf('node_modules') !== -1)
   }
 }
 
