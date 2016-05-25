@@ -84,7 +84,11 @@ function bundle (client, name = 'build.js', base = '/assets', watch = false) {
       console.timeEnd('bundled client')
       setTimeout(() => updating = false, 500)
       return content
+    }, err => {
+      updating = false
+      throw err
     })
+
     addFile(name, clientBuild, false)
   }
 
