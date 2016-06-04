@@ -66,6 +66,7 @@ function usage (cmd) {
 
     build     Build assets and lambda server handler
     dev       Start up dev server
+    serve     Serve built server
 
   Flags:
 
