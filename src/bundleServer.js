@@ -9,7 +9,6 @@ import 'cached-path-relative/shim'
 
 import browserify from 'browserify'
 import envify from 'envify/custom'
-import rollupify from 'rollupify'
 import uglifyify from 'uglifyify'
 import watchify from 'watchify'
 import babelify from 'babelify'

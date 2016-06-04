@@ -33,7 +33,7 @@
     "cached-path-relative": "^1.0.0",
     "co": "^4.6.0",
     "envify": "^3.4.0",
-    "envitro": "^1.0.0",
+    "envitro": "^1.0.2",
     "escape-regexp": "0.0.1",
     "farmhash": "^1.1.1",
     "koa": "^1.1.2",

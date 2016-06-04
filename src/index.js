@@ -2,14 +2,16 @@
  * Imports
  */
 
-import serve from './serve'
+import dev from './dev'
 import build from './build'
+import serve from './serve'
 
 /**
  * Exports
  */
 
 export default {
-  serve,
-  build
+  dev,
+  build,
+  serve
 }

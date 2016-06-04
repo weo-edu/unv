@@ -18,7 +18,7 @@ import bundleServer from './bundleServer'
  * Build
  */
 
-function build ({client, server, name, base, dir = './assets', handler = './functions/index/index.js' }) {
+function build ({client, server, name, base, dir = './assets', handler = './serve.js' }) {
   // Setup directories and clean
   prepare(dir, path.dirname(handler))
 

@@ -36,17 +36,22 @@ if (opts.modules) {
 Switch({
   dev: dev,
   build: build,
+  serve: serve,
   default: usage
 })(cmd, opts)
 
 // commands
 function dev (opts) {
   opts.watch = true
-  unv.serve(opts)
+  unv.dev(opts)
 }
 
 function build(opts) {
   unv.build(opts)
+}
+
+function serve(opts) {
+  unv.serve(opts)
 }
 
 function usage (cmd) {

@@ -6,6 +6,7 @@ import requireContent from '@f/require-content'
 import {get, stack} from 'source-map-stack'
 import stream from '@f/promise-stream'
 import vm from 'vm'
+import toPromise from '@f/to-promise'
 
 /**
  * Renderer
@@ -26,14 +27,32 @@ function renderer (serverStream) {
  * we log correctly for any errors on startup
  */
 
-function importRenderer (server) {
+function importRenderer (server, sm) {
   try {
     return getExport(requireContent(server))
   } catch (e) {
-    e.stack = stack(get(server), e, process.cwd())
+    e.stack = stack(sm || get(server), e, process.cwd())
     throw e
   }
 }
+
+/**
+ * Run render
+ *
+ * Run the render function
+ */
+
+function wrappedRequire (content) {
+  let sm = get(content)
+  let render = importRenderer(content, sm)
+  return (evt) => {
+    return toPromise(render(evt)).catch(e => {
+      e.stack = stack(sm, e, process.cwd())
+      throw e
+    })
+  }
+}
+
 
 /**
  * lazySm
@@ -64,3 +83,6 @@ function getExport (exp) {
  */
 
 export default renderer
+export {
+  wrappedRequire
+}
