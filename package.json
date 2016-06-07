@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@f/debounce": "^1.0.0",
+    "@f/is-promise": "^1.1.1",
     "@f/log-error": "^1.0.0",
     "@f/map": "^1.5.3",
     "@f/object-to-promise": "^1.1.3",
