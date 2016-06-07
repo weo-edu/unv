@@ -22,6 +22,7 @@
     "@f/promise-stream": "^1.1.3",
     "@f/require-content": "^1.0.1",
     "@f/switch": "^1.0.1",
+    "@f/thunk-to-promise": "^1.1.1",
     "@f/to-promise": "^1.1.2",
     "babel-plugin-transform-react-jsx": "^6.6.5",
     "babel-preset-es2015-without-regenerator": "^1.0.1",
