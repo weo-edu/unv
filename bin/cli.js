@@ -25,7 +25,6 @@ var opts = optStack('unv', {
   client: defaultClientPath(),
   server: defaultServerPath(),
   name: defaultName(),
-  port: 3000,
   base: '/assets'
 })
 
