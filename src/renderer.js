@@ -27,9 +27,9 @@ function renderer (serverStream) {
  * we log correctly for any errors on startup
  */
 
-function importRenderer (server, sm) {
+function importRenderer (server, {sm, filename}) {
   try {
-    return getExport(requireContent(server))
+    return getExport(requireContent(server, filename))
   } catch (e) {
     e.stack = stack(sm || get(server), e, process.cwd())
     throw e
@@ -42,9 +42,9 @@ function importRenderer (server, sm) {
  * Run the render function
  */
 
-function wrappedRequire (content) {
+function wrappedRequire (content, fileName) {
   let sm = get(content)
-  let render = importRenderer(content, sm)
+  let render = importRenderer(content, {sm, filename})
   return (evt) => {
     return toPromise(render(evt)).catch(e => {
       e.stack = stack(sm, e, process.cwd())
