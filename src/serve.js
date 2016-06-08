@@ -11,7 +11,6 @@ import {wrappedRequire} from './renderer'
 const DEFAULT_HANDLER = join(process.cwd(), 'serve.js')
 
 function serve ({port = 8080, handler = DEFAULT_HANDLER}) {
-  console.log('port', port)
   const serveFile = fs.readFileSync(handler)
   const render = wrappedRequire(serveFile)
 
