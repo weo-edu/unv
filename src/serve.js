@@ -12,7 +12,7 @@ const DEFAULT_HANDLER = join(process.cwd(), 'serve.js')
 
 function serve ({port = 8080, handler = DEFAULT_HANDLER}) {
   const serveFile = fs.readFileSync(handler)
-  const render = wrappedRequire(serveFile)
+  const render = wrappedRequire(serveFile, handler)
 
   const app = koa()
 
