@@ -14,7 +14,7 @@ import toPromise from '@f/to-promise'
 
 function renderer (serverStream) {
   return stream.map(server => ({
-    render: importRenderer(server),
+    render: importRenderer(server, {}),
     sourceMap: lazySm(server)
   }), serverStream)
 }
@@ -42,7 +42,7 @@ function importRenderer (server, {sm, filename}) {
  * Run the render function
  */
 
-function wrappedRequire (content, fileName) {
+function wrappedRequire (content, filename) {
   let sm = get(content)
   let render = importRenderer(content, {sm, filename})
   return (evt) => {
