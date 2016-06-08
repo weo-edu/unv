@@ -25,6 +25,7 @@ var opts = optStack('unv', {
   client: defaultClientPath(),
   server: defaultServerPath(),
   name: defaultName(),
+  port: process.env.PORT || undefined,
   base: '/assets'
 })
 
