@@ -1,0 +1,11 @@
+{
+  "unv": {
+    "client": "./client.js",
+    "server": "./server.js"
+  },
+  "environment": {
+    "base": {
+
+    }
+  }
+}

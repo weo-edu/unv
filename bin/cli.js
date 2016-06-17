@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// Enable babel by default when used from the command line
-require('babel-register')
 require('envitro')()
 
 /**
@@ -14,7 +12,7 @@ var minimist = require('minimist')
 var optStack = require('opt-stack')
 var path = require('path')
 
-var unv = require('..').default
+var unv = require('..')
 
 /**
  * CLI
@@ -28,6 +26,10 @@ var opts = optStack('unv', {
   port: process.env.PORT || undefined,
   base: '/assets'
 })
+
+if (!opts.port) {
+  delete opts.port
+}
 
 if (opts.modules) {
   opts.modules = configurePaths(path.resolve(process.cwd(), opts.modules))

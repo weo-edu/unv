@@ -9,8 +9,6 @@
     "unv": "bin/cli.js"
   },
   "scripts": {
-    "prepublish": "make build",
-    "postpublish": "make clean",
     "postversion": "git push && git push --tags && npm publish --access=public"
   },
   "dependencies": {

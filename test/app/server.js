@@ -2,14 +2,14 @@
  * Imports
  */
 
-import element from 'vdux/element'
-import vdux from 'vdux/string'
+const element = require('vdux/element')
+const vdux = require('vdux/string')
 
 
-import App from './app'
-import reducer from './reducer'
+const App = require('./app')
+const reducer = require('./reducer')
 
-var fs = require('fs')
+const fs = require('fs')
 const style = fs.readFileSync(__dirname + '/global.css', 'utf8')
 
 /**
