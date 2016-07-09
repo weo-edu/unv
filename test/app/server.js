@@ -2,15 +2,18 @@
  * Imports
  */
 
-const element = require('vdux/element')
-const vdux = require('vdux/string')
+const element = require('vdux/element').default
+const vdux = require('vdux/string').default
 
 
-const App = require('./app')
-const reducer = require('./reducer')
+const App = require('./app').default
+const reducer = require('./reducer').default
 
 const fs = require('fs')
 const style = fs.readFileSync(__dirname + '/global.css', 'utf8')
+
+const cloudFS = require('cloud-fs')
+const buildURL = cloudFS.url(process.env.BUILD_PATH)
 
 /**
  * Render
@@ -40,7 +43,7 @@ function handler (event) {
     throw new Error('woot')
   }
   var state = {counter: 0}
-  return page(render(<App value={state.counter} url={event.url}/>), state)
+  return Promise.resolve(page(render(<App value={state.counter} url={event.url}/>), state))
 }
 
 /**
@@ -55,7 +58,7 @@ function page (html, state) {
         <style>
           ${style}
         </style>
-        <script type='text/javascript' src='${process.env.CLIENT_JS_BUILD}'></script>
+        <script type='text/javascript' src='${buildURL}'></script>
         <script type='text/javascript'>
           window.__initialState__ = ${JSON.stringify(state)}
         </script>
