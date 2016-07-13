@@ -7,7 +7,7 @@ function render ({props}) {
   return (<div onClick={increment}>
     <div>Value: {props.value}</div>
     <div id='url'>{props.url}</div>
-    <h1>Elliot</h1>
+    <h1>Elliot Woot</h1>
     <img src={elliot}/>
   </div>)
 }

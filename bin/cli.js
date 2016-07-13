@@ -19,6 +19,7 @@ var unv = require('..')
  */
 
 var cmd = process.argv[2]
+
 var opts = optStack('unv', {
   client: defaultClientPath(),
   server: defaultServerPath(),
@@ -33,6 +34,10 @@ if (!opts.port) {
 
 if (opts.modules) {
   opts.modules = configurePaths(path.resolve(process.cwd(), opts.modules))
+}
+
+if (opts.squelch) {
+  opts.quiet = opts.squelch
 }
 
 Switch({
