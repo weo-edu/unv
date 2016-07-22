@@ -1,9 +1,0 @@
-{
-  "client": {
-    "path": "weo.js"
-  },
-  "elliot": {
-    "path": "app/elliot.jpg",
-    "url": "/assets/elliot-2466557555267872952.jpg"
-  }
-}

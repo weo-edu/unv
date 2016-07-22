@@ -8,7 +8,6 @@ require('envitro')()
 
 var Switch = require('@f/switch')
 var fs = require('fs')
-var minimist = require('minimist')
 var optStack = require('opt-stack')
 var path = require('path')
 
@@ -23,9 +22,9 @@ var cmd = process.argv[2]
 var opts = optStack('unv', {
   client: defaultClientPath(),
   server: defaultServerPath(),
-  name: defaultName(),
   port: process.env.PORT || undefined,
-  base: '/assets'
+  assetsDir: 'assets',
+  outFile: `scripts/${defaultName()}`
 })
 
 if (!opts.port) {
@@ -40,6 +39,14 @@ if (opts.squelch) {
   opts.quiet = opts.squelch
 }
 
+if (opts.outFile) {
+  opts.outFile = path.resolve(path.join(process.cwd(), opts.outFile))
+}
+
+if (opts.assetsDir) {
+  opts.assetsDir = path.resolve(path.join(process.cwd(), opts.assetsDir))
+}
+
 Switch({
   dev: dev,
   build: build,
@@ -50,7 +57,10 @@ Switch({
 // commands
 function dev (opts) {
   opts.watch = true
-  unv.dev(opts)
+  opts.port = opts.port || 3000
+  unv.dev(opts).listen(opts.port, (err) => {
+    console.log(`Listening on port: ${opts.port}`)
+  })
 }
 
 function build(opts) {
@@ -100,7 +110,6 @@ function defaultClientPath () {
 function defaultServerPath () {
   return tryDefaults('server.js')
     || tryDefaults('server/')
-    || path.resolve(__dirname + '/../src/defaultIndex.js')
 }
 
 function defaultName () {

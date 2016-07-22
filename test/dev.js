@@ -2,18 +2,21 @@
 import request from 'supertest'
 import test from 'tape'
 import cheerio from 'cheerio'
-import unv from '../src'
-import bundleClient from '../src/bundleClient'
-
-var a = require('./assets.json')
+import unv from '..'
+import bundleClient from '../lib/bundleClient'
+import cloudFS from 'cloud-fs'
+import http from 'http'
+import rimraf from 'rimraf'
 
 test('should render index', function (t) {
   t.plan(2)
-  let app = unv.dev({
+  const app = unv.dev({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    name: 'weo.js'
-  })
+    outFile: './test/app/scripts/build.js',
+    assetsDir: './test/assets',
+    watch: false
+  }).listen()
 
   request(app).get('/test').end(function (err, res) {
     let $ = cheerio.load(res.text)
@@ -26,11 +29,13 @@ test('should render index', function (t) {
 
 test('should throw error', function (t) {
   t.plan(2)
-  let app = unv.dev({
+  const app = unv.dev({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    name: 'weo.js'
-  })
+    outFile: './test/app/scripts/build.js',
+    assetsDir: './test/assets',
+    watch: false
+  }).listen()
 
   request(app).get('/throw').end(function (err, res) {
     let $ = cheerio.load(res.text)
@@ -43,45 +48,38 @@ test('should throw error', function (t) {
 
 test('should render entry asset', function (t) {
   t.plan(2)
-  let app = unv.dev({
+  const app = unv.dev({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    name: 'weo.js'
+    outFile: './test/app/scripts/build.js',
+    assetsDir: './test/assets',
+    watch: false
+  }).listen()
+
+  const clientUrl = cloudFS.url('./app/scripts/build.js')
+  request(app).get(`/test${clientUrl}`).end(function (err, res) {
+    t.ok(res.headers['content-type'].indexOf('application/javascript') >= 0)
+    t.ok(res.text.indexOf('vdux/dom') >= 0)
+    app.close()
   })
-
-  let assets = bundleClient('./test/app/client.js', a.client.path)
-
-  assets.wait().then(function ({assets, files}) {
-    const clientUrl = getClientUrl(assets)
-    request(app).get(clientUrl).end(function (err, res) {
-      t.ok(res.headers['content-type'].indexOf('application/javascript') >= 0)
-      t.ok(res.text.indexOf('vdux/dom') >= 0)
-      app.close()
-    })
-  })
-
-  const reg = /\/assets\/weo-\d+.js/
-
-  function getClientUrl (obj) {
-    return Object.keys(obj).find(function (url) {
-      return reg.test(url)
-    })
-  }
-
 
 })
 
 test('should render elliot asset', function (t) {
   t.plan(1)
-  let app = unv.dev({
+  const app = unv.dev({
     client: './test/app/client.js',
     server: './test/app/server.js',
-    name: 'weo.js'
-  })
+    outFile: './test/app/scripts/build.js',
+    assetsDir: './test/assets',
+    watch: false
+  }).listen()
 
-  request(app).get(a.elliot.url).end(function (err, res) {
+  const elliotUrl = cloudFS.url('./app/elliot.jpg')
+  request(app).get(`/test${elliotUrl}`).end(function (err, res) {
     t.ok(res.headers['content-type'].indexOf('image/jpeg') >= 0)
-
+    rimraf.sync('test/assets')
+    rimraf.sync('test/app/scripts')
     app.close()
   })
 

@@ -3,14 +3,7 @@
     "client": "./client.js",
     "server": "./server.js"
   },
-  "environment": {
-    "base": {}
-  },
   "devDependencies": {
-    "cloud-fs": "^0.1.1"
-  },
-  "dependencies": {
-    "koa-static": "^2.0.0",
-    "nodemon": "^1.9.2"
+    "decache": "^4.0.0"
   }
 }
