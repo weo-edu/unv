@@ -8,6 +8,8 @@ const cloudFS = require('cloud-fs')
 const http = require('http')
 const rimraf = require('rimraf')
 
+cloudFS.setAssetsDir(`${__dirname}/assets`)
+
 test('should render index', function (t) {
   t.plan(2)
   const app = unv.dev({
