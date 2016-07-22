@@ -1,12 +1,12 @@
 
-import request from 'supertest'
-import test from 'tape'
-import cheerio from 'cheerio'
-import unv from '..'
-import bundleClient from '../lib/bundleClient'
-import cloudFS from 'cloud-fs'
-import http from 'http'
-import rimraf from 'rimraf'
+const request = require('supertest')
+const test = require('tape')
+const cheerio = require('cheerio')
+const unv = require('..')
+const bundleClient = require('../lib/bundleClient')
+const cloudFS = require('cloud-fs')
+const http = require('http')
+const rimraf = require('rimraf')
 
 test('should render index', function (t) {
   t.plan(2)

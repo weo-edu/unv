@@ -2,15 +2,15 @@
  * Imports
  */
 
-import test from 'tape'
-import unv from '..'
-import co from 'co'
-import fs from 'mz/fs'
-import cheerio from 'cheerio'
-import rimraf from 'rimraf'
-import path from 'path'
-import logError from '@f/log-error'
-import cloudFS from 'cloud-fs'
+const test = require('tape')
+const unv = require('..')
+const co = require('co')
+const fs = require('mz/fs')
+const cheerio = require('cheerio')
+const rimraf = require('rimraf')
+const path = require('path')
+const logError = require('@f/log-error')
+const cloudFS = require('cloud-fs')
 
 /**
  * Tests
