@@ -46,7 +46,6 @@
     "@f/log-error": "^1.0.0",
     "babel-polyfill": "^6.7.2",
     "babel-preset-es2015": "^6.1.2",
-    "brfs": "^1.4.3",
     "cheerio": "^0.20.0",
     "cloud-fs": "^0.1.4",
     "decache": "^4.0.0",
