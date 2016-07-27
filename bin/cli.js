@@ -24,7 +24,8 @@ var opts = optStack('unv', {
   server: defaultServerPath(),
   port: process.env.PORT || undefined,
   assetsDir: 'assets',
-  outFile: `scripts/${defaultName()}`
+  outFile: `scripts/${defaultName()}`,
+  transforms: Array
 })
 
 if (!opts.port) {

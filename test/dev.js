@@ -17,7 +17,8 @@ test('should render index', function (t) {
     server: './test/app/server.js',
     outFile: './test/app/scripts/build.js',
     assetsDir: './test/assets',
-    watch: false
+    watch: false,
+    transforms: ['br-cloud-fs']
   }).listen()
 
   request(app).get('/test').end(function (err, res) {
@@ -36,7 +37,8 @@ test('should throw error', function (t) {
     server: './test/app/server.js',
     outFile: './test/app/scripts/build.js',
     assetsDir: './test/assets',
-    watch: false
+    watch: false,
+    transforms: ['br-cloud-fs']
   }).listen()
 
   request(app).get('/throw').end(function (err, res) {
@@ -55,7 +57,8 @@ test('should render entry asset', function (t) {
     server: './test/app/server.js',
     outFile: './test/app/scripts/build.js',
     assetsDir: './test/assets',
-    watch: false
+    watch: false,
+    transforms: ['br-cloud-fs']
   }).listen()
 
   const clientUrl = cloudFS.url('./app/scripts/build.js')
@@ -74,7 +77,8 @@ test('should render elliot asset', function (t) {
     server: './test/app/server.js',
     outFile: './test/app/scripts/build.js',
     assetsDir: './test/assets',
-    watch: false
+    watch: false,
+    transforms: ['br-cloud-fs']
   }).listen()
 
   const elliotUrl = cloudFS.url('./app/elliot.jpg')

@@ -23,7 +23,8 @@ test('should build assets', co.wrap(function * (t) {
     client: './test/app/client.js',
     server: './test/app/server.js',
     outFile: './test/app/scripts/build.js',
-    assetsDir: './test/assets'
+    assetsDir: './test/assets',
+    transforms: ['br-cloud-fs']
   })
 
   t.ok(yield fs.exists(path.join('./test', 'app/scripts/build.js')))

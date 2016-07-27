@@ -1,7 +1,8 @@
 {
   "unv": {
     "client": "./client.js",
-    "server": "./server.js"
+    "server": "./server.js",
+    "transforms": ["br-cloud-fs"]
   },
   "devDependencies": {
     "decache": "^4.0.0"
