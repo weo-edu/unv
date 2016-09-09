@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 require('envitro')()
+require('babel-register')
 
 /**
  * Imports
@@ -69,7 +70,10 @@ function build(opts) {
 }
 
 function serve(opts) {
-  unv.serve(opts)
+  opts.port = opts.port || 3000
+  unv.serve(opts).listen(opts.port, (err) => {
+    console.log(`Listening on port: ${opts.port}`)
+  })
 }
 
 function usage (cmd) {
