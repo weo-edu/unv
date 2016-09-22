@@ -26,6 +26,7 @@
     "br-cloud-fs": "^0.1.1",
     "browserify": "^13.0.0",
     "browserify-hmr": "github:ashaffer/browserify-hmr",
+    "bundle-collapser": "^1.2.1",
     "cached-path-relative": "^1.0.0",
     "envify": "^3.4.0",
     "envitro": "^1.0.3",
