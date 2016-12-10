@@ -56,7 +56,10 @@ Switch({
   default: usage
 })(cmd, opts)
 
-// commands
+/**
+ * Commands
+ */
+
 function dev (opts) {
   opts.watch = true
   opts.port = opts.port || 3000
@@ -65,16 +68,20 @@ function dev (opts) {
   })
 }
 
-function build(opts) {
-  unv.build(opts)
+function build (opts) {
+  unv.build(opts).then(() => process.exit(0), () => process.exit(-1))
 }
 
-function serve(opts) {
+function serve (opts) {
   opts.port = opts.port || 3000
   unv.serve(opts).listen(opts.port, (err) => {
     console.log(`Listening on port: ${opts.port}`)
   })
 }
+
+/**
+ * Usage
+ */
 
 function usage (cmd) {
   if (cmd) {
